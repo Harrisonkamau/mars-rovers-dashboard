@@ -1,13 +1,16 @@
 {
     "env": {
         "node": true,
-        "es6": true
+        "es6": true,
+        "mocha": true
     },
     "extends": [
         "airbnb-base"
     ],
     "plugins": [
-        "import"
+        "import",
+        "mocha",
+        "chai-expect"
       ],
     "parserOptions": {
         "ecmaVersion": 12
@@ -30,6 +33,9 @@
         "no-underscore-dangle": "off",
         "no-warning-comments": "warn",
         "operator-linebreak": ["error", "after", { "overrides": { "?": "before", ":": "before"} }],
-        "import/no-extraneous-dependencies": ["error", { "devDependencies": true }]
+        "import/no-extraneous-dependencies": ["error", { "devDependencies": true }],
+        "chai-expect/missing-assertion": "error",
+        "mocha/no-exclusive-tests": "error",
+        "mocha/no-identical-title": "error"
       }
 }
