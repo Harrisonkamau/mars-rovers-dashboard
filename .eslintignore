@@ -1,0 +1,5 @@
+# Node modules
+node_modules/**
+
+# HTML file
+src/public/index.html
