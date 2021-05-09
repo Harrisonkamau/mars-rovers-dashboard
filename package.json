@@ -1,0 +1,23 @@
+{
+  "name": "mars-rovers-dashboard",
+  "version": "1.0.0",
+  "description": "Mars Rovers Dashboard which consumes Nasa API to render rovers info",
+  "main": "server/index.js",
+  "repository": "https://github.com/Harrisonkamau/mars-rovers-dashboard",
+  "author": "Harrison Kamau",
+  "license": "MIT",
+  "private": false,
+  "scripts": {
+    "dev": "NODE_ENV=development nodemon src/server/index.js",
+    "start": "node src/server/index.js"
+  },
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "express": "^4.17.1"
+  },
+  "devDependencies": {
+    "dotenv": "^9.0.1",
+    "morgan": "^1.10.0",
+    "nodemon": "^2.0.7"
+  }
+}
