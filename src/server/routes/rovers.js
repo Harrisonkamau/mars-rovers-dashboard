@@ -11,6 +11,7 @@ router.get(
     const { roverName } = req.params;
     const roverPhotos = await getRoverPhotos(roverName);
     res.json(roverPhotos);
-  });
+  },
+);
 
 module.exports = router;

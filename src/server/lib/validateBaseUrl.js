@@ -7,7 +7,7 @@ const DEFAULT_URL = 'https://api.nasa.gov/mars-photos/api/v1/rovers';
  */
 async function validateApiBaseUrl(url) {
   if (!url) {
-    return DEFAULT_URL
+    return DEFAULT_URL;
   }
 
   return url;

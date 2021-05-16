@@ -26,15 +26,14 @@ async function createApp() {
     }
 
     // custom middleware to lowercase request params
-    app.use(async(req, res, next) => {
+    app.use(async (req, res, next) => {
       if (req.url.startsWith('/api/v1/rovers')) {
         const [baseUrl, requestParam] = req.url.split('/rovers/');
         req.url = `${baseUrl}/rovers/${requestParam.toLowerCase()}`;
-        console.log(req)
       }
 
-     await next();
-   });
+      await next();
+    });
 
     // register routes
     publicRoutes.forEach((r) => app.use(r));
