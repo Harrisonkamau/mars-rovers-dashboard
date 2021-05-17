@@ -5,14 +5,12 @@ const { ApiKeyError } = require('../errors');
  * @param {string} apiKey - NASA API key
  * @returns either an error or a valid api key
  */
-function validateApiKey(apiKey) {
-  return new Promise((resolve, reject) => {
-    if (!apiKey) {
-      reject(new ApiKeyError('Missing NASA API Key'));
-    }
+async function validateApiKey(apiKey) {
+  if (!apiKey) {
+    throw new ApiKeyError('Missing NASA API Key');
+  }
 
-    resolve(apiKey);
-  });
+  return apiKey;
 }
 
 module.exports = validateApiKey;
