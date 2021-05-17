@@ -16,6 +16,30 @@ main {
   padding: 20px;
 }
 
+select {
+  max-height: 300px;
+  min-width: 250px;
+  min-height: 38px;
+  overflow: hidden;
+  overflow-y: auto;
+  display: block;
+  white-space: nowrap;
+  text-align: left;
+  line-height: normal;
+  padding-left: 8px;
+  background-color: #F6F8F7;
+  border-radius: 8px;
+  border: 1px solid #DFE1E0;
+}
+
+select:active, select:focus {
+  outline: none;
+  box-shadow: none;
+  border: 1px solid #DFE1E0;
+  border-radius: 8px;
+}
+
+
 footer {
   /* footer styles */
 }
@@ -28,7 +52,7 @@ footer {
 /* -------------------  DESKTOP  -------------------- */
 
 @media (min-width: 1224px) {
-  /* use mobile */
+
 }
 
 /* -------------------  LARGE SCREENS  -------------- */
