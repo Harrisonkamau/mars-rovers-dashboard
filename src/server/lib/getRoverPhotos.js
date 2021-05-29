@@ -3,8 +3,6 @@ const validateApiKey = require('./validateApiKey');
 const validateBaseUrl = require('./validateBaseUrl');
 const handleAxiosError = require('./handleAxiosError');
 
-const { NASA_API_KEY, NASA_BASE_API_URL } = process.env;
-
 /**
  * Fetches a rovers photos
  * @param {string} roverName - name of the rover.
@@ -12,6 +10,7 @@ const { NASA_API_KEY, NASA_BASE_API_URL } = process.env;
  */
 async function getRoverPhotos(roverName) {
   try {
+    const { NASA_API_KEY, NASA_BASE_API_URL } = process.env;
     const validatedApiKey = await validateApiKey(NASA_API_KEY);
     const validatedBaseUrl = await validateBaseUrl(NASA_BASE_API_URL);
     const response = await axios.request({
