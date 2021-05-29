@@ -6,7 +6,7 @@ const { ApiKeyError } = require('../errors');
  * @returns either an error or a valid api key
  */
 async function validateApiKey(apiKey) {
-  if (!apiKey) {
+  if (!apiKey || apiKey === 'undefined') {
     throw new ApiKeyError('Missing NASA API Key');
   }
 

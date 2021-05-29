@@ -8,12 +8,12 @@ describe('#getRoverPhotos', () => {
   let axiosRequestStub;
   let apiKeyStub;
 
-  before(() => {
+  beforeEach(() => {
     axiosRequestStub = sinon.stub(axios, 'request');
     apiKeyStub = sinon.stub(process.env, 'NASA_API_KEY').value('sample-valid-api-key');
   });
 
-  after(() => {
+  afterEach(() => {
     axiosRequestStub.restore();
     apiKeyStub.restore();
   });
@@ -41,7 +41,7 @@ describe('#getRoverPhotos', () => {
         apiKeyStub.value(undefined);
 
         await getRoverPhotos('curiosity');
-        assert.equal(requestStub.calledOnce, false);
+        sinon.assert.notCalled(requestStub);
       });
     });
   });
