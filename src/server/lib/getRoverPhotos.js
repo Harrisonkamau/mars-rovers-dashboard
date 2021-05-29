@@ -10,9 +10,8 @@ const handleAxiosError = require('./handleAxiosError');
  */
 async function getRoverPhotos(roverName) {
   try {
-    const { NASA_API_KEY, NASA_BASE_API_URL } = process.env;
-    const validatedApiKey = await validateApiKey(NASA_API_KEY);
-    const validatedBaseUrl = await validateBaseUrl(NASA_BASE_API_URL);
+    const validatedApiKey = await validateApiKey(process.env.NASA_API_KEY);
+    const validatedBaseUrl = await validateBaseUrl(process.env.NASA_BASE_API_URL);
     const response = await axios.request({
       method: 'get',
       params: { roverName },

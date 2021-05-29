@@ -10,6 +10,7 @@ describe('#getRoverPhotos', () => {
 
   beforeEach(() => {
     axiosRequestStub = sinon.stub(axios, 'request');
+    process.env.NASA_API_KEY = undefined;
     apiKeyStub = sinon.stub(process.env, 'NASA_API_KEY').value('sample-valid-api-key');
   });
 
