@@ -5,10 +5,8 @@ body {
   flex-direction: column;
   font-family: Arial;
   min-height: 100vh;
-}
-
-header {
-  /* header styles */
+  font-family: 'Raleway', sans-serif;
+  line-height: 1.5;
 }
 
 main {
@@ -16,6 +14,30 @@ main {
   padding: 20px;
 }
 
+/* ------------------ HEADER ----------------------- */
+.nav {
+  justify-content: space-around;
+  height: 80px;
+  display: flex;
+  flex-grow: 0;
+  text-transform: uppercase;
+  width: 100%;
+  margin-bottom: 30px;
+  z-index: 1000;
+  background-color: #fff;
+  box-shadow: 0 2px 2px -1px rgb(152 162 179 / 30%), 0 1px 5px -2px rgb(152 162 179 / 30%);
+}
+
+.nav-brand {
+  font-size: 1.5rem;
+  font-weight: bolder;
+  margin: 14px;
+  padding-right: 18px;
+  padding-left: 50px;
+  padding-bottom: 30px;
+}
+
+/* ------------------ DROPDOWN MENU ----------------------- */
 select {
   max-height: 300px;
   min-width: 250px;
@@ -39,14 +61,59 @@ select:active, select:focus {
   border-radius: 8px;
 }
 
+.hidden {
+  display: none;
+}
 
-footer {
-  /* footer styles */
+
+/* ------------------ SLIDER ----------------------- */
+.slideshow-container {
+  max-width: 500px;
+  position: relative;
+  margin: auto;
+}
+
+.slider-show__prev, .slider-show__next {
+  cursor: pointer;
+  position: absolute;
+  top: 50%;
+  width: auto;
+  margin-top: -22px;
+  padding: 16px;
+  color: white;
+  font-weight: bold;
+  font-size: 18px;
+  transition: 0.6s ease;
+  border-radius: 0 3px 3px 0;
+  user-select: none;
+}
+
+.slider-show__next {
+  right: 0;
+  border-radius: 3px 0 0 3px;
+}
+
+.slider-show__prev:hover, .slider-show__next:hover {
+  background-color: rgba(0,0,0,0.8);
+}
+
+.slider-show__dots {
+  text-align: center;
+}
+
+.slider-show__dot {
+  cursor: pointer;
+  height: 15px;
+  width: 15px;
+  margin: 0 2px;
+  background-color: #bbb;
+  border-radius: 50%;
+  display: inline-block;
+  transition: background-color 0.6s ease;
 }
 
 /* -------------------  TABLET  --------------------- */
 @media (min-width: 768px) {
-  /* use mobile */
 }
 
 /* -------------------  DESKTOP  -------------------- */
@@ -58,5 +125,4 @@ footer {
 /* -------------------  LARGE SCREENS  -------------- */
 
 @media (min-width: 1824px) {
-  /* use mobile */
 }

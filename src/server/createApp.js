@@ -2,7 +2,7 @@ require('dotenv').config();
 
 const express = require('express');
 const { errors: joiErrors } = require('celebrate');
-
+const cors = require('cors');
 const bodyParser = require('body-parser');
 const morgan = require('morgan');
 const publicRoutes = require('./routes');
@@ -13,12 +13,14 @@ const isDev = process.env.NODE_ENV === 'development';
  * Creates an Express application, registering routes & relevant middleware
  * @returns {void} void
  */
-async function createApp() {
+async function createApp(corsOptions = {}) {
   try {
     const app = express();
 
     // register middleware
     app.use(bodyParser.json());
+
+    app.use(cors(corsOptions));
 
     // only log requests in Dev environment
     if (isDev) {

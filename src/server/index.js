@@ -8,7 +8,12 @@ const PORT = process.env.PORT || 4000;
  */
 async function main() {
   try {
-    const app = await createApp();
+    // this is for local testing, to be removed in prod
+    const corsOptions = {
+      origin: `http://localhost:${PORT}`,
+    };
+
+    const app = await createApp(corsOptions);
 
     app.listen(PORT, () => console.log(`Server started on http://localhost:${PORT}`));
   } catch (error) {
