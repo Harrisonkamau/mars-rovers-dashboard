@@ -5,6 +5,25 @@ let store = {
 };
 
 /* -------------------  HELPER FUNCTIONS  --------------------- */
+/**
+ * Function to capitalize a string
+ * @param {String} str - string to capitalize
+ * @returns {String} - returns a capitalized string
+ */
+function titleize(str) {
+  if (str && str.length > 1) {
+    const [first, ...rest] = str.split('');
+    return `${first.toUpperCase()}${rest.join('')}`;
+  }
+
+  return 'Default Title';
+}
+
+/**
+ * Function to retrieve a rover's photos by name
+ * @param {String} roverName - Name of the rover to search & retrieve its photos
+ * @returns {any<object>} - returns a Rover's object from the backend
+ */
 async function getRoverPhotos(roverName) {
   try {
     const response = await fetch(`http://localhost:4000/api/v1/rovers/${roverName}`);
@@ -15,10 +34,17 @@ async function getRoverPhotos(roverName) {
   }
 }
 
+/**
+ * Function to get the selected rover & makes an API call to get the rover's photos
+ * - Also hides the Selection bar if the API returns a success.
+ * - Then it triggers a render of the slideshow.
+ * @param {void}
+ * @returns {HTMLElement} - returns an HTML element
+ */
 async function handleOnBarChange() {
   const selectedValue = document.getElementById('selectionBar');
   if (selectedValue) {
-    updateStore(store, { roverName: selectedValue.value });
+    updateStore(store, { roverName: titleize(selectedValue.value) });
     const roverData = await getRoverPhotos(selectedValue.value);
 
     if (roverData) {
@@ -36,7 +62,31 @@ async function handleOnBarChange() {
   }
 }
 
+/**
+ * Pure function to update the global store. Also triggers a DOM re-render
+ * @param {any<Object>} store - old state to update
+ * @param {any<Object>} newState - a newly state generated from the old one
+ * @returns {void}
+ */
+function updateStore(store, newState) {
+  Object.assign(store, newState);
+  render(root, store);
+}
+
+/**
+ * Function to either move to the prev or next slider image
+ * @param {Number} position - either -1 (for the previous slider img) or 1 (for the next slider img)
+ * @returns {void}
+ */
+function navigateSliderImages(position) {}
+
 /* -------------------  COMPONENTS  --------------------- */
+
+/**
+ * Component that renders a dropdown menu with a list of available rovers to view.
+ * @param {void}
+ * @returns {HTMLElement} - returns an HTML element
+ */
 const SelectionBar = (options) => {
   return `
     <div class='rovers-selection-bar'>
@@ -49,6 +99,11 @@ const SelectionBar = (options) => {
   `;
 };
 
+/**
+ * Component that renders a rover Photo
+ * @param {void}
+ * @returns {HTMLElement} - returns an HTML element
+ */
 function Image({ url, alt }) {
   return `
     <div class=''>
@@ -57,6 +112,11 @@ function Image({ url, alt }) {
   `;
 }
 
+/**
+ * Component that renders a rovers navigation arrows. A user can click on them to move between current, previous and next images on the slide show
+ * @param {void}
+ * @returns {HTMLElement} - returns an HTML element
+ */
 function NextAndPrevArrows() {
   return `
     <a class='slider-show__prev'>
@@ -68,6 +128,11 @@ function NextAndPrevArrows() {
   `;
 }
 
+/**
+ * Component that renders a rovers navigation dots. Shortcut to navigate to a specific image on the slide show
+ * @param {void}
+ * @returns {HTMLElement} - returns an HTML element
+ */
 function SliderDots() {
   return `
     <div class='slider-show__dots'>
@@ -79,6 +144,11 @@ function SliderDots() {
   `
 }
 
+/**
+ * Component that renders a Navbar
+ * @param {void}
+ * @returns {HTMLElement} - returns an HTML element
+ */
 const NavigationBar = () => `
 <header class="nav">
   <div class="nav-brand">
@@ -86,6 +156,11 @@ const NavigationBar = () => `
   </div>
 </header>`;
 
+/**
+ * Component that a rover's photos slide show.
+ * @param {void}
+ * @returns {HTMLElement} - returns an HTML element
+ */
 const Slider = (roverName) => `
   <div class="slideshow-container" hidden>
     <h3>${roverName} Photos</h3>
@@ -101,10 +176,6 @@ const options = store.roverNames.map((item) => ({
   value: item.toLowerCase(),
 }));
 
-function updateStore(store, newState) {
-  Object.assign(store, newState);
-  render(root, store);
-}
 
 const App = (state) => {
   return `
