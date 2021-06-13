@@ -74,21 +74,50 @@ function updateStore(store, newState) {
 }
 
 /**
+ * Retrieve the image being shown currently on the slideshow (or the one with class `slider-img__show`)
+ * @param {any<Object>} state - Global current app state
+ * @returns {any<Object>}
+ */
+function getCurrentImage(state) {
+  try {
+    const galleryDiv = document.querySelector('.slider-images');
+    const currentChild = galleryDiv.querySelector('.slider-img__show');
+    const metadata = JSON.parse(currentChild.firstChild.getAttribute('metadata'));
+    const image = state.roverPhotos.find(({ id }) => id === metadata.id);
+    const position = state.roverPhotos.indexOf(image);
+
+    return {
+      ...metadata,
+      position,
+      nodeElement: currentChild,
+      parentDiv: galleryDiv,
+    };
+  } catch (error) {
+    throw error;
+  }
+}
+
+/**
  * Pure function to render a previous image on the slide show
  * @param {any<Object>} state - current global store to retrieve the current slideshow position & to generate a new state
  * @returns {void}
  */
 function showPreviousImage(state) {
-  console.log('[showPreviousImage] state: ', state);
-  // check the current currentSliderPosition
-  // - if there is no previous image do nothing
-  // - else
-  // subtract 1 & update the state
-  // call `updateStore`
-  // render the previous image
-  if (state && state.currentSliderPosition) {
+  const currentImg = getCurrentImage(state);
 
+  if (currentImg.position === 0) {
+    return;
   }
+
+  const prevImg = currentImg.nodeElement.previousSibling;
+
+  currentImg.nodeElement.classList.remove('slider-img__show');
+  currentImg.nodeElement.classList.add('slider-img__hide');
+  prevImg.classList.remove('slider-img__hide');
+  prevImg.classList.add('slider-img__show');
+
+   // update state without rerendering
+   Object.assign(state, { currentSliderPosition: currentImg.position - 1 });
 }
 
 /**
@@ -97,8 +126,19 @@ function showPreviousImage(state) {
  * * @returns {void}
  */
 function showNextImage(state) {
-  console.log('[showNextImage] state: ', state);
+  const currentImg = getCurrentImage(state);
 
+   // check if the currentImg is the last item (if so, set to start all over)
+  const nextImgElement = currentImg.position === state.roverPhotos.length - 1
+    ? currentImg.parentDiv.firstChild : currentImg.nodeElement.nextSibling;
+
+  currentImg.nodeElement.classList.remove('slider-img__show');
+  currentImg.nodeElement.classList.add('slider-img__hide');
+  nextImgElement.classList.remove('slider-img__hide');
+  nextImgElement.classList.add('slider-img__show');
+
+  // update state without rerendering
+  Object.assign(state, { currentSliderPosition: currentImg.position + 1 });
 }
 
 /**
@@ -147,8 +187,8 @@ const SelectionBar = (options) => {
  * @param {void}
  * @returns {HTMLElement} - returns an HTML element
  */
-function Image({ url, alt }) {
-  return `<img src=${url} alt="${alt}" />`;
+function Image({ url, alt, metadata }) {
+  return `<img src=${url} alt="${alt}" metadata=${JSON.stringify(metadata)} />`;
 }
 
 /**
@@ -161,8 +201,8 @@ function SliderImages(state) {
   const targetDiv = document.querySelector('.slider-images');
   targetDiv.hidden = false;
 
-  const images = state.roverPhotos.map(({ img_src, camera }) => ({ url: img_src, alt: camera.full_name }));
-  const childrenDivs = images.map(({ url, alt }) => Image({ url, alt }));
+  const images = state.roverPhotos.map(({ img_src, camera, id }) => ({ url: img_src, alt: camera.full_name, metadata: { id } }));
+  const childrenDivs = images.map(({ url, alt, metadata }) => Image({ url, alt, metadata }));
 
   childrenDivs.forEach((child, index) => targetDiv.appendChild(generateSliderElement(child, index)));
 }
