@@ -1,7 +1,9 @@
 const root = document.getElementById('root');
 let store = {
-  roverName: 'Curiosity',
+  currentRoverName: 'Curiosity',
   roverNames: ['Select a rover', 'Curiosity', 'Spirit', 'Opportunity'],
+  roverPhotos: [],
+  currentSliderPosition: 0,
 };
 
 /* -------------------  HELPER FUNCTIONS  --------------------- */
@@ -41,23 +43,21 @@ async function getRoverPhotos(roverName) {
  * @param {void}
  * @returns {HTMLElement} - returns an HTML element
  */
-async function handleOnBarChange() {
+async function handleOnBarChange(store) {
   const selectedValue = document.getElementById('selectionBar');
   if (selectedValue) {
-    updateStore(store, { roverName: titleize(selectedValue.value) });
+    updateStore(store, { currentRoverName: titleize(selectedValue.value) });
     const roverData = await getRoverPhotos(selectedValue.value);
 
     if (roverData) {
+      updateStore(store, { roverPhotos: roverData });
+      // hide dropdown & show the slideshow
       const selectionDropdownDiv = document.querySelector('.rovers-selection-bar');
       selectionDropdownDiv.classList.add('hidden');
       const sliderDiv = document.querySelector('.slideshow-container');
       sliderDiv.hidden = false;
 
-      const sliderImgDiv = document.querySelector('.slider-img');
-      sliderImgDiv.hidden = false;
-      const [firstPhoto] = roverData;
-      const imgTag = Image({ url: firstPhoto.img_src, alt: firstPhoto.camera.full_name });
-      sliderImgDiv.innerHTML = imgTag;
+      SliderImages(store);
     }
   }
 }
@@ -74,11 +74,54 @@ function updateStore(store, newState) {
 }
 
 /**
- * Function to either move to the prev or next slider image
- * @param {Number} position - either -1 (for the previous slider img) or 1 (for the next slider img)
+ * Pure function to render a previous image on the slide show
+ * @param {any<Object>} state - current global store to retrieve the current slideshow position & to generate a new state
  * @returns {void}
  */
-function navigateSliderImages(position) {}
+function showPreviousImage(state) {
+  console.log('[showPreviousImage] state: ', state);
+  // check the current currentSliderPosition
+  // - if there is no previous image do nothing
+  // - else
+  // subtract 1 & update the state
+  // call `updateStore`
+  // render the previous image
+  if (state && state.currentSliderPosition) {
+
+  }
+}
+
+/**
+ * Render the next image on the slide show
+ * @param {any<Object>} state - state - current global store to retrieve the current slideshow position & to generate a new state
+ * * @returns {void}
+ */
+function showNextImage(state) {
+  console.log('[showNextImage] state: ', state);
+
+}
+
+/**
+ * Generate an HTML element that contains a slider image
+ * @param {HTMLElement} nodeElement - raw node element to wrap within a styled div
+ * @param {Number} index - position of the nodeElement in the array of elements
+ * @returns {HTMLElement} div
+ */
+function generateSliderElement(nodeElement, index) {
+  const div = document.createElement('div');
+
+  div.classList.add('slider-img');
+  div.innerHTML = nodeElement;
+
+  // the first image on the slideshow should be shown by default
+  if (index === 0) {
+    div.classList.add('slider-img__show');
+  } else {
+    div.classList.add('slider-img__hide');
+  }
+
+  return div;
+}
 
 /* -------------------  COMPONENTS  --------------------- */
 
@@ -92,7 +135,7 @@ const SelectionBar = (options) => {
     <div class='rovers-selection-bar'>
       <h4>Select a Rover to show</h4>
       <br />
-      <select id='selectionBar' onchange="handleOnBarChange()">
+      <select id='selectionBar' onchange="handleOnBarChange(store)">
         ${options.map(({ label, value }) => `<option value=${value} id=${value}>${label}</option>`)}
       </select>
     </div>
@@ -105,11 +148,23 @@ const SelectionBar = (options) => {
  * @returns {HTMLElement} - returns an HTML element
  */
 function Image({ url, alt }) {
-  return `
-    <div class=''>
-      <img src=${url} alt=${alt} />
-    </div>
-  `;
+  return `<img src=${url} alt="${alt}" />`;
+}
+
+/**
+ * Populate the slider images div with the rover's photos
+ * Only the first item is shown by default. The rest will be revealed by clicking prev & next arrows
+ * @param {any<Object>} state - Global app state
+ * @returns {void}
+ */
+function SliderImages(state) {
+  const targetDiv = document.querySelector('.slider-images');
+  targetDiv.hidden = false;
+
+  const images = state.roverPhotos.map(({ img_src, camera }) => ({ url: img_src, alt: camera.full_name }));
+  const childrenDivs = images.map(({ url, alt }) => Image({ url, alt }));
+
+  childrenDivs.forEach((child, index) => targetDiv.appendChild(generateSliderElement(child, index)));
 }
 
 /**
@@ -117,12 +172,12 @@ function Image({ url, alt }) {
  * @param {void}
  * @returns {HTMLElement} - returns an HTML element
  */
-function NextAndPrevArrows() {
+function NextAndPrevArrows(store) {
   return `
-    <a class='slider-show__prev'>
+    <a class='slider-show__prev' onclick="showPreviousImage(store)">
       <i class="fa fa-arrow-left" aria-hidden="true"></i>
     </a>
-    <a class='slider-show__next'>
+    <a class='slider-show__next' onclick="showNextImage(store)">
       <i class="fa fa-arrow-right" aria-hidden="true"></i>
     </a>
   `;
@@ -161,13 +216,12 @@ const NavigationBar = () => `
  * @param {void}
  * @returns {HTMLElement} - returns an HTML element
  */
-const Slider = (roverName) => `
+const Slider = (state) => `
   <div class="slideshow-container" hidden>
-    <h3>${roverName} Photos</h3>
-    <div class="slider-img" hidden></div>
-    <div class="slider-img" hidden></div>
-    ${NextAndPrevArrows()}
-    ${SliderDots()}
+    <h3>${state.currentRoverName} Photos</h3>
+    <hr />
+    <div class="slider-images" hidden></div>
+    ${NextAndPrevArrows(state)}
 </div>
 `;
 
@@ -185,7 +239,7 @@ const App = (state) => {
         ${SelectionBar(options)}
       </section>
       <section>
-      ${Slider(state.roverName)}
+        ${Slider(state)}
       </section>
     </main>
   `;
