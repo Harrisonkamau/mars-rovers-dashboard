@@ -105,16 +105,13 @@ function getCurrentImage(state) {
 function showPreviousImage(state) {
   const currentImg = getCurrentImage(state);
 
-  if (currentImg.position === 0) {
-    return;
-  }
-
-  const prevImg = currentImg.nodeElement.previousSibling;
+  const prevImgElement = currentImg.position === 0
+    ? currentImg.parentDiv.lastChild : currentImg.nodeElement.previousSibling;
 
   currentImg.nodeElement.classList.remove('slider-img__show');
   currentImg.nodeElement.classList.add('slider-img__hide');
-  prevImg.classList.remove('slider-img__hide');
-  prevImg.classList.add('slider-img__show');
+  prevImgElement.classList.remove('slider-img__hide');
+  prevImgElement.classList.add('slider-img__show');
 
    // update state without rerendering
    Object.assign(state, { currentSliderPosition: currentImg.position - 1 });
