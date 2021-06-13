@@ -82,7 +82,7 @@ function getCurrentImage(state) {
   try {
     const galleryDiv = document.querySelector('.slider-images');
     const currentChild = galleryDiv.querySelector('.slider-img__show');
-    const metadata = JSON.parse(currentChild.firstChild.getAttribute('metadata'));
+    const metadata = JSON.parse(currentChild.firstChild.lastChild.getAttribute('metadata'));
     const image = state.roverPhotos.find(({ id }) => id === metadata.id);
     const position = state.roverPhotos.indexOf(image);
 
@@ -187,8 +187,8 @@ const SelectionBar = (options) => {
  * @param {void}
  * @returns {HTMLElement} - returns an HTML element
  */
-function Image({ url, alt, metadata }) {
-  return `<img src=${url} alt="${alt}" metadata=${JSON.stringify(metadata)} />`;
+function Image({ url, alt, metadata, current = 0, total = 0 }) {
+  return `<div><span class='slider-spanner'>${current} / ${total}</span><img src=${url} alt="${alt}" metadata=${JSON.stringify(metadata)} /></div>`;
 }
 
 /**
@@ -202,14 +202,13 @@ function SliderImages(state) {
   targetDiv.hidden = false;
 
   const images = state.roverPhotos.map(({ img_src, camera, id }) => ({ url: img_src, alt: camera.full_name, metadata: { id } }));
-  const childrenDivs = images.map(({ url, alt, metadata }) => Image({ url, alt, metadata }));
-
+  const childrenDivs = images.map(({ url, alt, metadata }, index) => Image({ url, alt, metadata, current: index + 1, total: state.roverPhotos.length }));
   childrenDivs.forEach((child, index) => targetDiv.appendChild(generateSliderElement(child, index)));
 }
 
 /**
  * Component that renders a rovers navigation arrows. A user can click on them to move between current, previous and next images on the slide show
- * @param {void}
+ * @param {store} - Global store
  * @returns {HTMLElement} - returns an HTML element
  */
 function NextAndPrevArrows(store) {
@@ -221,22 +220,6 @@ function NextAndPrevArrows(store) {
       <i class="fa fa-arrow-right" aria-hidden="true"></i>
     </a>
   `;
-}
-
-/**
- * Component that renders a rovers navigation dots. Shortcut to navigate to a specific image on the slide show
- * @param {void}
- * @returns {HTMLElement} - returns an HTML element
- */
-function SliderDots() {
-  return `
-    <div class='slider-show__dots'>
-      <span class='slider-show__dot'></span>
-      <span class='slider-show__dot'></span>
-      <span class='slider-show__dot'></span>
-      <span class='slider-show__dot'></span>
-    </div>
-  `
 }
 
 /**
