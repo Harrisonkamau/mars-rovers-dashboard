@@ -179,6 +179,18 @@ select:active, select:focus {
   display: none;
 }
 
+svg {
+  fill: #5D5E5D;
+  height: 1.2em;
+  vertical-align: bottom;
+  margin-right: 0.2em;
+  transition: all 0.2s ease-in-out;
+}
+
+.tab-btn__active > svg {
+  fill: #0779F9;
+}
+
 /* -------------------  TABLET  --------------------- */
 @media (min-width: 768px) {
 }
