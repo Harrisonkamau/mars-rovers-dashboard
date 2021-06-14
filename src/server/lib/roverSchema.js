@@ -4,7 +4,6 @@ const ROVER_NAMES = Object.freeze([
   'curiosity',
   'spirit',
   'opportunity',
-  'perserverance',
 ]);
 
 const roverSchema = {
