@@ -6,6 +6,7 @@ let store = {
   currentSliderPosition: 0,
   pictureOfTheDay: {},
   appReady: false,
+  recentPhotoDate: new Date(),
   currentRover: {
     id: '5',
     name: 'Curiosity',
@@ -75,7 +76,7 @@ async function handleOnBarChange(store) {
 
     if (roverData) {
       const [firstPhoto] = roverData;
-      updateStore(store, { roverPhotos: roverData, currentRover: firstPhoto.rover });
+      updateStore(store, { roverPhotos: roverData, currentRover: firstPhoto.rover, recentPhotoDate: firstPhoto.earth_date });
       // hide dropdown & show the slideshow and the Tabs
       const selectionBarSection = document.querySelector('.selection_bar-section');
       const sliderSection = document.querySelector('.slider-section');
@@ -432,11 +433,13 @@ const TabContent = (state) => `
 </div>
 
 <div class='tab-content' id='recentPhotos'>
-  <p>Recent Photos</p>
+  <section class='slider-section'>
+  ${Slider(state)}
+  </section>
 </div>
 
 <div class='tab-content' id='recentPhotosDate'>
-  <p>Recent photos date</p>
+  <p>Recent photo date: <strong>${formatDate(state.recentPhotoDate)}</strong></p>
 </div>
   `;
 
@@ -454,7 +457,7 @@ const Tab = (state) => `
   <button class='tab-btn launchDate tab-btn__active' onclick="showTab('launchDate')">${CalendarSVG()} Launch Date</button>
   <button class='tab-btn landingDate' onclick="showTab('landingDate')">${CalendarSVG()} Landing Date</button>
   <button class='tab-btn status' onclick="showTab('status')">${StatusSVG()} Status</button>
-  <button class='tab-btn recentPhotos' onclick="showTab('recentPhotos')">${PhotosSVG()} Recent Photos</button>
+  <button class='tab-btn recentPhotos' onclick="showTab('recentPhotos')">${PhotosSVG()} Gallery</button>
   <button class='tab-btn recentPhotosDate' onclick="showTab('recentPhotosDate')">${CalendarSVG()} Recent Photos Date</button>
 </div>
 `;
@@ -590,9 +593,6 @@ const App = (state) => {
       <section>${LandingPage(state)}</section>
       <section class='selection_bar-section' id='selection_bar-section'>
         ${SelectionBar(options)}
-      </section>
-      <section class='slider-section'>
-        ${Slider(state)}
       </section>
       <section class='tabs-section'>
         ${Tab(state)}
