@@ -60,16 +60,14 @@ async function handleOnBarChange(store) {
       const [firstPhoto] = roverData;
       updateStore(store, { roverPhotos: roverData, currentRover: firstPhoto.rover });
       // hide dropdown & show the slideshow and the Tabs
-      const selectionDropdownDiv = document.querySelector('.rovers-selection-bar');
-      selectionDropdownDiv.classList.add('hidden');
-      const sliderDiv = document.querySelector('.slideshow-container');
-      const tabHeader = document.querySelector('.tab-header');
-      const tabsDiv = document.querySelector('.tab');
+      const selectionBarSection = document.querySelector('.selection_bar-section');
+      const sliderSection = document.querySelector('.slider-section');
+      const tabsSection = document.querySelector('.tabs-section');
       const defaultTab = document.querySelector('#launchDate');
 
-      sliderDiv.hidden = false;
-      tabHeader.style.display = 'block';
-      tabsDiv.style.display = 'block';
+      selectionBarSection.style.display = 'none';
+      sliderSection.style.display = 'block';
+      tabsSection.style.display = 'block';
       defaultTab.style.display = 'block';
 
       SliderImages(store);
@@ -194,9 +192,9 @@ function showTab(className) {
 }
 
 /**
- * Format Date from 'YYYY-MM-DD' to ''
+ * Format Date from 'YYYY-MM-DD' to 'DD, MM, YYY'
  * @param {String} dateStr - Date string to convert
- * @returns {String} formattedDateStr - returns a date string in the format 'Month, Day Year'
+ * @returns {String} formattedDateStr - returns a date string in the format 'Day, Month, Year'
  */
 function formatDate(dateStr) {
   const dateOptions = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
@@ -208,27 +206,22 @@ function formatDate(dateStr) {
 
 const TabContent = (state) => `
 <div class='tab-content' id='launchDate'>
-  <h3>Launch Date</h3>
   <p><strong>${state.currentRover.name}</strong> was launched on <strong>${formatDate(state.currentRover.launch_date)}</strong> </p>
 </div>
 
 <div class=' tab-content' id='landingDate'>
-  <h3>Landing Date</h3>
-  <p><strong>${state.currentRover.name}</strong> was landed on Mars on <strong>${formatDate(state.currentRover.landing_date)}</strong> </p>
+  <p><strong>${state.currentRover.name}</strong> landed on Mars on <strong>${formatDate(state.currentRover.landing_date)}</strong> </p>
 </div>
 
 <div class='tab-content' id='status'>
-  <h3>Mission Status</h3>
-  <p><strong>${state.currentRover.name}</strong> mission's status <strong>${formatDate(state.currentRover.status)}</strong> </p>
+  <p><strong>${state.currentRover.name} </strong> mission's status <strong>"${state.currentRover.status}"</strong> </p>
 </div>
 
 <div class='tab-content' id='recentPhotos'>
-  <h3>Recent Photos</h3>
   <p>Recent Photos</p>
 </div>
 
 <div class='tab-content' id='recentPhotosDate'>
-  <h3>Recent Photos Date</h3>
   <p>Recent photos date</p>
 </div>
   `;
@@ -236,6 +229,7 @@ const TabContent = (state) => `
 const Tab = (state) => `
 <div class='tab-header'>
   <h3>Rover Name: <strong>${state.currentRover.name}</strong></h3>
+  <hr class='tab-header_underline' />
 </div>
 <div class='tab'>
   <button class='tab-btn launchDate tab-btn__active' onclick="showTab('launchDate')">Launch Date</button>
@@ -320,7 +314,7 @@ const NavigationBar = () => `
  * @returns {HTMLElement} - returns an HTML element
  */
 const Slider = (state) => `
-  <div class="slideshow-container" hidden>
+  <div class="slideshow-container">
     <div class="slider-images" hidden></div>
     ${NextAndPrevArrows(state)}
 </div>
@@ -336,13 +330,13 @@ const App = (state) => {
   return `
     ${NavigationBar()}
     <main>
-      <section>
+      <section class='selection_bar-section'>
         ${SelectionBar(options)}
       </section>
-      <section>
+      <section class='slider-section'>
         ${Slider(state)}
       </section>
-      <section>
+      <section class='tabs-section'>
         ${Tab(state)}
         ${TabContent(state)}
       </section>
