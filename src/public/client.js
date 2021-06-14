@@ -4,6 +4,8 @@ let store = {
   roverNames: ['Select a rover', 'Curiosity', 'Spirit', 'Opportunity'],
   roverPhotos: [],
   currentSliderPosition: 0,
+  pictureOfTheDay: {},
+  appReady: false,
   currentRover: {
     id: '5',
     name: 'Curiosity',
@@ -38,6 +40,21 @@ async function getRoverPhotos(roverName) {
     const response = await fetch(`http://localhost:4000/api/v1/rovers/${roverName}`);
     const result = await response.json();
     return result.data.photos;
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+/**
+ * Function to retrieve the picture of the day (it will change on a daily basis)
+ * @param {void}
+ * @returns {any<Object>}
+ */
+async function getPicOfTheDay() {
+  try {
+    const response = await fetch('http://localhost:4000/api/v1/apod');
+    const result = await response.json();
+    return result.data;
   } catch (error) {
     console.error(error);
   }
@@ -459,6 +476,30 @@ const SelectionBar = (options) => {
   `;
 };
 
+const ArrowIcon = () => `
+<a href='#selection_bar-section' class='arrow-icon'></a>
+`;
+
+/**
+ * Renders the picture of the day
+ * @param {any<Object>} state - Global state of the application
+ * @returns {HTMLElement}
+ */
+const LandingPage = (state) => {
+  return `
+  <div class='landing-page'>
+    <img src="${state.pictureOfTheDay.hdurl}" alt="HD URL - Pic of the day" class='landing-page_pic'>
+    <div class='landing-page_caption'>
+      <h4 class='landing-page_caption-title'>${state.pictureOfTheDay.title}</h4>
+      <p class='landing-page_caption-explanation'>Picture of the day. Date: <strong class='landing-page_pic-date'>${formatDate(state.pictureOfTheDay.date)}</strong></p>
+    </div>
+    <div class='landing-page_arrow-marking'>
+      ${ArrowIcon()}
+    </div>
+  <div>
+  `;
+}
+
 /**
  * Component that renders a rover Photo
  * @param {void}
@@ -528,16 +569,26 @@ const options = store.roverNames.map((item) => ({
   value: item.toLowerCase(),
 }));
 
+// Invoke the function to get the Landing Page ready for display
+getPicOfTheDay().then((result) => updateStore(store, { appReady: true, pictureOfTheDay: result }));
 
 /**
  * Renders all UI components
  * @param {any<Object>} state - global app state
  */
 const App = (state) => {
+  if (!state.appReady) {
+    return `<div>
+    ${NavigationBar()}
+    Loading...
+    </div>`;
+  }
+
   return `
     ${NavigationBar()}
     <main>
-      <section class='selection_bar-section'>
+      <section>${LandingPage(state)}</section>
+      <section class='selection_bar-section' id='selection_bar-section'>
         ${SelectionBar(options)}
       </section>
       <section class='slider-section'>

@@ -10,7 +10,7 @@ async function main() {
   try {
     // this is for local testing, to be removed in prod
     const corsOptions = {
-      origin: `http://localhost:${PORT}`,
+      origin: 'http://127.0.0.1:8887',
     };
 
     const app = await createApp(corsOptions);
