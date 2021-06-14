@@ -1,4 +1,4 @@
-/* -------------------  MOBILE  --------------------- */
+/* -------------------  DESKTOP  --------------------- */
 
 body {
   display: flex;
@@ -346,8 +346,68 @@ strong {
   font-size: 17px;
 }
 
-/* -------------------  TABLET  --------------------- */
-@media (min-width: 768px) {
+/* -------------------  MOBILE  --------------------- */
+@media (max-width: 768px) {
+  main {
+    /* max-width: 80%; */
+    padding: 0;
+  }
+
+  .nav {
+    height: 40px;
+    max-width: 90%;
+  }
+
+  .nav-brand {
+    font-size: 0.85rem;
+    font-weight: bolder;
+    margin: 10px 14px;
+    padding-right: 18px;
+    padding-left: 33px;
+    padding-bottom: 17px;
+    display: block;
+    position: absolute;
+  }
+
+  .nav-item {
+    display: none;
+  }
+
+  .landing-page_pic {
+    min-height: 250px;
+    min-width: 204px;
+  }
+
+  .landing-page_caption-title {
+    font-weight: 400;
+    font-size: 1.5rem;
+  }
+
+  .landing-page_pic-date {
+    font-size: 1rem;
+  }
+
+  .landing-page_arrow-marking a {
+    width: 12px;
+    height: 12px;
+  }
+
+  .selection_bar-section, select {
+    max-height: 250px;
+    min-height: 40px;
+    min-width: 80%;
+    max-width: 90%;
+  }
+
+  img {
+    max-width: 90%;
+    max-height: 400px;
+  }
+
+  .tabs-section {
+    padding: 14px;
+    max-width: 650px;
+  }
 }
 
 /* -------------------  DESKTOP  -------------------- */
