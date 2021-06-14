@@ -38,13 +38,24 @@ main {
 }
 
 /* ------------------ DROPDOWN MENU ----------------------- */
+.rovers-selection-bar {
+  text-align: center;
+}
+.selection-bar_underline {
+  text-align: center;
+  border: none;
+  background-color: #DFE1E0;
+  height: 1px;
+  max-width: 120px;
+}
+
 select {
+  margin-left: 30px;
   max-height: 300px;
-  min-width: 250px;
-  min-height: 38px;
+  min-width: 350px;
+  min-height: 45px;
   overflow: hidden;
   overflow-y: auto;
-  display: block;
   white-space: nowrap;
   text-align: left;
   line-height: normal;
@@ -69,10 +80,17 @@ select:active, select:focus {
 /* ------------------ SLIDER ----------------------- */
 .slider-section {
   display: none;
+  margin-bottom: 20px;
 }
 
+.slider-images {
+  min-height: 500px;
+}
+
+
 .slideshow-container {
-  max-width: 500px;
+  /* max-width: 500px; */
+  max-width: 800px;
   position: relative;
   margin: auto;
 }
@@ -104,6 +122,7 @@ select:active, select:focus {
 
 .slider-img__show {
   display: block;
+  max-width: 100%;
 }
 
 .slider-img__hide {
@@ -116,6 +135,18 @@ select:active, select:focus {
   padding: 8px 12px;
   font-weight: bolder;
   position: absolute;
+}
+
+.slider-img_inner {
+  height: 450px;
+  max-height: 600px;
+}
+
+img {
+  max-width: 600px;
+  min-width: 100%;
+  max-height: 500px;
+  height: auto;
 }
 
 
@@ -189,6 +220,11 @@ svg {
 
 .tab-btn__active > svg {
   fill: #0779F9;
+}
+
+strong {
+  font-weight: bolder;
+  font-size: 17px;
 }
 
 /* -------------------  TABLET  --------------------- */

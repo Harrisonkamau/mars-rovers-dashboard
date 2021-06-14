@@ -203,6 +203,11 @@ function formatDate(dateStr) {
 }
 
 /* -------------------  COMPONENTS  --------------------- */
+/**
+ * Component that renders a Calendar icon
+ * @param {void}
+ * @returns {HTMLElement} SVG - returns an SVG element
+ */
 const CalendarSVG = () => `
 <svg viewBox="0 0 24 24"><path d="M30.224,3.948h-1.098V2.75c0-1.517-1.197-2.75-2.67-2.75c-1.474,0-2.67,1.233-2.67,2.75v1.197h-2.74V2.75
   c0-1.517-1.197-2.75-2.67-2.75c-1.473,0-2.67,1.233-2.67,2.75v1.197h-2.74V2.75c0-1.517-1.197-2.75-2.67-2.75
@@ -227,6 +232,11 @@ const CalendarSVG = () => `
   </svg>
 `;
 
+/**
+ * Component that renders a Status icon
+ * @param {void}
+ * @returns {HTMLElement} SVG - returns an SVG element
+ */
 const StatusSVG = () => `
 <svg viewBox="0 0 523.315 523.315"><g>
 <g>
@@ -273,6 +283,11 @@ const StatusSVG = () => `
 </svg>
 `;
 
+/**
+ * Component that renders an Image icon
+ * @param {void}
+ * @returns {HTMLElement} SVG - returns an SVG element
+ */
 const PhotosSVG = () => `
 <svg version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
 	viewBox="0 0 606.365 606.366"
@@ -381,6 +396,11 @@ const PhotosSVG = () => `
 </svg>
 `
 
+/**
+ * Component that renders a tab's content
+ * @param {any<Object>} state - global app state
+ * @returns {HTMLElement} Tabs Content
+ */
 const TabContent = (state) => `
 <div class='tab-content' id='launchDate'>
   <p><strong>${state.currentRover.name}</strong> was launched on <strong>${formatDate(state.currentRover.launch_date)}</strong> </p>
@@ -403,6 +423,11 @@ const TabContent = (state) => `
 </div>
   `;
 
+  /**
+ * Component that renders a tabs links
+ * @param {any<Object>} state - global app state
+ * @returns {HTMLElement} Tabs
+ */
 const Tab = (state) => `
 <div class='tab-header'>
   <h3>Rover Name: <strong>${state.currentRover.name}</strong></h3>
@@ -424,7 +449,8 @@ const Tab = (state) => `
 const SelectionBar = (options) => {
   return `
     <div class='rovers-selection-bar'>
-      <h4>Select a Rover to show</h4>
+      <h4>Select a Rover to show:</h4>
+      <hr class='selection-bar_underline' />
       <br />
       <select id='selectionBar' onchange="handleOnBarChange(store)">
         ${options.map(({ label, value }) => `<option value=${value} id=${value}>${label}</option>`)}
@@ -439,7 +465,7 @@ const SelectionBar = (options) => {
  * @returns {HTMLElement} - returns an HTML element
  */
 function Image({ url, alt, metadata, current = 0, total = 0 }) {
-  return `<div><span class='slider-spanner'>${current} / ${total}</span><img src=${url} alt="${alt}" metadata=${JSON.stringify(metadata)} /></div>`;
+  return `<div class='slider-img_inner'><span class='slider-spanner'>${current} / ${total}</span><img src=${url} alt="${alt}" metadata=${JSON.stringify(metadata)} /></div>`;
 }
 
 /**
@@ -503,6 +529,10 @@ const options = store.roverNames.map((item) => ({
 }));
 
 
+/**
+ * Renders all UI components
+ * @param {any<Object>} state - global app state
+ */
 const App = (state) => {
   return `
     ${NavigationBar()}
