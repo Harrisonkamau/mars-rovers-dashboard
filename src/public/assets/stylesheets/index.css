@@ -413,7 +413,9 @@ strong {
 /* -------------------  DESKTOP  -------------------- */
 
 @media (min-width: 1224px) {
-
+  .tabs-section {
+    padding: 20px;
+  }
 }
 
 /* -------------------  LARGE SCREENS  -------------- */
