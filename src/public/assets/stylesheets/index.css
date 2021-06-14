@@ -17,7 +17,7 @@ main {
 /* ------------------ HEADER ----------------------- */
 .nav {
   justify-content: space-around;
-  height: 60px;
+  height: 50px;
   display: flex;
   flex-grow: 0;
   text-transform: uppercase;
@@ -31,10 +31,42 @@ main {
 .nav-brand {
   font-size: 1.5rem;
   font-weight: bolder;
-  margin: 14px;
+  margin: 2px 14px;
   padding-right: 18px;
   padding-left: 50px;
   padding-bottom: 30px;
+}
+
+.nav-item {
+  margin: 2px 14px;
+  font-size: 1.2rem;
+  font-weight: 400;
+  padding-right: 18px;
+  padding-left: 50px;
+  padding-bottom: 30px;
+}
+
+.btn {
+  height: 40px;
+  letter-spacing: -.005em;
+  font-size: 1rem;
+  cursor: pointer;
+  line-height: 1.5;
+  background-color: #2593F9;
+  display: inline-block;
+  text-align: center;
+  border-radius: 4px;
+  border-color: #2593F9;
+  border-style: solid;
+}
+
+.nav-item_a_tag {
+  text-decoration: none;
+  color: white;
+}
+
+.nav-item_a_tag:active, .nav-item_a_tag:focus {
+  text-decoration: none;
 }
 
 /* ------------------ LANDING PAGE ----------------------- */

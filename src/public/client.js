@@ -553,6 +553,14 @@ const NavigationBar = () => `
   <div class="nav-brand">
     <a nohref>Mars Rovers Dashboard</a>
   </div>
+
+  <div class="nav-item">
+      <button class="btn btn__get-started nav-item__link" id="get-started">
+        <a href='#selection_bar-section' class='nav-item_a_tag'>
+          Get Started
+        </a>
+      </button>
+    </div>
 </header>`;
 
 /**
