@@ -4,6 +4,13 @@ let store = {
   roverNames: ['Select a rover', 'Curiosity', 'Spirit', 'Opportunity'],
   roverPhotos: [],
   currentSliderPosition: 0,
+  currentRover: {
+    id: '5',
+    name: 'Curiosity',
+    landing_date: '2012-08-06',
+    launch_date: '2011-11-26',
+    status: 'active',
+  },
 };
 
 /* -------------------  HELPER FUNCTIONS  --------------------- */
@@ -50,12 +57,20 @@ async function handleOnBarChange(store) {
     const roverData = await getRoverPhotos(selectedValue.value);
 
     if (roverData) {
-      updateStore(store, { roverPhotos: roverData });
-      // hide dropdown & show the slideshow
+      const [firstPhoto] = roverData;
+      updateStore(store, { roverPhotos: roverData, currentRover: firstPhoto.rover });
+      // hide dropdown & show the slideshow and the Tabs
       const selectionDropdownDiv = document.querySelector('.rovers-selection-bar');
       selectionDropdownDiv.classList.add('hidden');
       const sliderDiv = document.querySelector('.slideshow-container');
+      const tabHeader = document.querySelector('.tab-header');
+      const tabsDiv = document.querySelector('.tab');
+      const defaultTab = document.querySelector('#launchDate');
+
       sliderDiv.hidden = false;
+      tabHeader.style.display = 'block';
+      tabsDiv.style.display = 'block';
+      defaultTab.style.display = 'block';
 
       SliderImages(store);
     }
@@ -160,8 +175,76 @@ function generateSliderElement(nodeElement, index) {
   return div;
 }
 
+/**
+ * Display a given Tab's content on click
+ * @param {*} className
+ * @returns {void}
+ */
+function showTab(className) {
+  const tabBtns = document.querySelectorAll('.tab-btn__active');
+  tabBtns.forEach((btn) => btn.classList.remove('tab-btn__active'));
+
+  const tabContents = document.querySelectorAll('.tab-content');
+  tabContents.forEach((tabContent) => tabContent.style.display = 'none');
+
+  const tabBtn = document.querySelector(`.${className}`);
+  const tabContent = document.querySelector(`#${className}`);
+  tabBtn.classList.add('tab-btn__active');
+  tabContent.style.display = 'block';
+}
+
+/**
+ * Format Date from 'YYYY-MM-DD' to ''
+ * @param {String} dateStr - Date string to convert
+ * @returns {String} formattedDateStr - returns a date string in the format 'Month, Day Year'
+ */
+function formatDate(dateStr) {
+  const dateOptions = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+
+  return new Date(dateStr).toLocaleDateString('en-US', dateOptions);
+}
+
 /* -------------------  COMPONENTS  --------------------- */
 
+const TabContent = (state) => `
+<div class='tab-content' id='launchDate'>
+  <h3>Launch Date</h3>
+  <p><strong>${state.currentRover.name}</strong> was launched on <strong>${formatDate(state.currentRover.launch_date)}</strong> </p>
+</div>
+
+<div class=' tab-content' id='landingDate'>
+  <h3>Landing Date</h3>
+  <p><strong>${state.currentRover.name}</strong> was landed on Mars on <strong>${formatDate(state.currentRover.landing_date)}</strong> </p>
+</div>
+
+<div class='tab-content' id='status'>
+  <h3>Mission Status</h3>
+  <p><strong>${state.currentRover.name}</strong> mission's status <strong>${formatDate(state.currentRover.status)}</strong> </p>
+</div>
+
+<div class='tab-content' id='recentPhotos'>
+  <h3>Recent Photos</h3>
+  <p>Recent Photos</p>
+</div>
+
+<div class='tab-content' id='recentPhotosDate'>
+  <h3>Recent Photos Date</h3>
+  <p>Recent photos date</p>
+</div>
+  `;
+
+const Tab = (state) => `
+<div class='tab-header'>
+  <h3>Rover Name: <strong>${state.currentRover.name}</strong></h3>
+</div>
+<div class='tab'>
+  <button class='tab-btn launchDate tab-btn__active' onclick="showTab('launchDate')">Launch Date</button>
+  <button class='tab-btn landingDate' onclick="showTab('landingDate')">Landing Date</button>
+  <button class='tab-btn status' onclick="showTab('status')">Status</button>
+  <button class='tab-btn recentPhotos' onclick="showTab('recentPhotos')">Recent Photos</button>
+  <button class='tab-btn recentPhotosDate' onclick="showTab('recentPhotosDate')">Recent Photos Date</button>
+</div>
+`;
 /**
  * Component that renders a dropdown menu with a list of available rovers to view.
  * @param {void}
@@ -238,8 +321,6 @@ const NavigationBar = () => `
  */
 const Slider = (state) => `
   <div class="slideshow-container" hidden>
-    <h3>${state.currentRoverName} Photos</h3>
-    <hr />
     <div class="slider-images" hidden></div>
     ${NextAndPrevArrows(state)}
 </div>
@@ -260,6 +341,10 @@ const App = (state) => {
       </section>
       <section>
         ${Slider(state)}
+      </section>
+      <section>
+        ${Tab(state)}
+        ${TabContent(state)}
       </section>
     </main>
   `;

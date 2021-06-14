@@ -113,6 +113,52 @@ select:active, select:focus {
   position: absolute;
 }
 
+
+/* -------------------  TABS ------------------------ */
+.tab {
+  display: none;
+  overflow: hidden;
+  border: 1px solid #DFE1E0;
+  border-radius: 8px;
+  background-color: #f1f1f1;
+  /* border-bottom: 2px solid RGBA(#8e44ad, 0.2); */
+}
+
+.tab-header {
+  display: none;
+}
+
+.tab-btn {
+  font-size: 15px;
+  background-color: inherit;
+  float: left;
+  border: 1px solid #E7EAE9;
+  cursor: pointer;
+  padding: 14px 16px;
+  transition: 0.3s;
+}
+
+.tab-btn__active {
+  background-color: #fff;
+
+}
+
+.tab-content {
+  display: none;
+  padding: 6px 12px;
+  border: 1px solid #DFE1E0;
+  border-radius: 8px;
+  border-top: none;
+}
+
+.tab-content_default {
+  display: block;
+}
+
+.tab-content_hide {
+  display: none;
+}
+
 /* -------------------  TABLET  --------------------- */
 @media (min-width: 768px) {
 }
