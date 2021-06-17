@@ -75,8 +75,13 @@ async function handleOnBarChange(store) {
     const roverData = await getRoverPhotos(selectedValue.value);
 
     if (roverData) {
-      const [firstPhoto] = roverData;
-      updateStore(store, { roverPhotos: roverData, currentRover: firstPhoto.rover, recentPhotoDate: firstPhoto.earth_date });
+      const dataMap = Immutable.fromJS(roverData);
+      const firstPhoto = dataMap.first();
+      updateStore(store, {
+        roverPhotos: dataMap,
+        currentRover: firstPhoto.get('rover').toJS(),
+        recentPhotoDate: firstPhoto.get('earth_date'),
+      });
       // hide dropdown & show the slideshow and the Tabs
       const selectionBarSection = document.querySelector('.selection_bar-section');
       const sliderSection = document.querySelector('.slider-section');
@@ -114,7 +119,7 @@ function getCurrentImage(state) {
     const galleryDiv = document.querySelector('.slider-images');
     const currentChild = galleryDiv.querySelector('.slider-img__show');
     const metadata = JSON.parse(currentChild.firstChild.lastChild.getAttribute('metadata'));
-    const image = state.roverPhotos.find(({ id }) => id === metadata.id);
+    const image = state.roverPhotos.find((item) => item.get('id') === metadata.id);
     const position = state.roverPhotos.indexOf(image);
 
     return {
@@ -157,7 +162,7 @@ function showNextImage(state) {
   const currentImg = getCurrentImage(state);
 
    // check if the currentImg is the last item (if so, set to start all over)
-  const nextImgElement = currentImg.position === state.roverPhotos.length - 1
+  const nextImgElement = currentImg.position === state.roverPhotos.size - 1
     ? currentImg.parentDiv.firstChild : currentImg.nodeElement.nextSibling;
 
   currentImg.nodeElement.classList.remove('slider-img__show');
@@ -522,8 +527,18 @@ function SliderImages(state) {
   const targetDiv = document.querySelector('.slider-images');
   targetDiv.hidden = false;
 
-  const images = state.roverPhotos.map(({ img_src, camera, id }) => ({ url: img_src, alt: camera.full_name, metadata: { id } }));
-  const childrenDivs = images.map(({ url, alt, metadata }, index) => Image({ url, alt, metadata, current: index + 1, total: state.roverPhotos.length }));
+  const images = state.roverPhotos.map((photo) => ({
+    url: photo.get('img_src'),
+    alt: photo.get('camera').get('full_name'),
+    metadata: { id: photo.get('id') },
+  }));
+  const childrenDivs = images.map(({ url, alt, metadata }, index) => Image({
+    url,
+    alt,
+    metadata,
+    current: index + 1,
+    total: state.roverPhotos.size,
+  }));
   childrenDivs.forEach((child, index) => targetDiv.appendChild(generateSliderElement(child, index)));
 }
 
