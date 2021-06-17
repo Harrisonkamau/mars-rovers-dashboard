@@ -38,3 +38,7 @@ Use either:
 - [Chrome Web Server](https://chrome.google.com/webstore/detail/web-server-for-chrome/ofhbbkphhbklhfoeikjpcbhemlocgigb?hl=en)
 - [http-server](https://www.npmjs.com/package/http-server)
 - [live-server](https://www.npmjs.com/package/live-server)
+
+### Important Note
+The backend runs on port `4000` by default. Changing this requires updating the request URL on the client-side [here](https://github.com/Harrisonkamau/mars-rovers-dashboard/blob/main/src/public/client.js#L41) and [here](https://github.com/Harrisonkamau/mars-rovers-dashboard/blob/main/src/public/client.js#L56).
+Ensure that you keep this server running all the time. The command to run the dev server is either `yarn dev` or `npm run dev`.
